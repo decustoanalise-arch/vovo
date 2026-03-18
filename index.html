@@ -211,14 +211,22 @@
                     </div>
                 `).join('');
 
-                document.getElementById('lista-operacional').innerHTML = d.producao.map(p => `
-                    <div class="card">
-                        <div class="card-header"><h3>${p.nome}</h3></div>
-                        <div class="info-row"><span>Gás</span><span style="color:var(--accent)">R$ ${(p.detalhes.gas || 0).toFixed(2)}</span></div>
-                        <div class="info-row"><span>Energia</span><span style="color:#60a5fa">R$ ${(p.detalhes.energia || 0).toFixed(2)}</span></div>
-                        <div class="info-row"><span>Mão de Obra</span><span style="color:#a855f7">R$ ${(p.detalhes.maoDeObra || 0).toFixed(2)}</span></div>
-                    </div>
-                `).join('');
+                // Localize este trecho no seu código e substitua:
+document.getElementById('lista-operacional').innerHTML = d.producao.map(p => `
+    <div class="card">
+        <div class="card-header"><h3>${p.nome}</h3></div>
+        <div class="info-row"><span>Ingredientes (Ficha)</span><span style="color:var(--success)">R$ ${(p.custoTotal - (p.detalhes.gas || 0) - (p.detalhes.energia || 0) - (p.detalhes.maoDeObra || 0)).toFixed(2)}</span></div>
+        
+        <div class="info-row"><span>Gás</span><span style="color:var(--accent)">R$ ${(p.detalhes.gas || 0).toFixed(2)}</span></div>
+        <div class="info-row"><span>Energia</span><span style="color:#60a5fa">R$ ${(p.detalhes.energia || 0).toFixed(2)}</span></div>
+        <div class="info-row"><span>Mão de Obra</span><span style="color:#a855f7">R$ ${(p.detalhes.maoDeObra || 0).toFixed(2)}</span></div>
+        
+        <div class="info-row" style="margin-top:10px; border-top:1px dashed #334155; padding-top:10px;">
+            <span style="font-weight:bold">Custo Total Unitário</span>
+            <span style="font-weight:bold; color:#fff">R$ ${p.custoTotal.toFixed(2)}</span>
+        </div>
+    </div>
+`).join('');
 
                 document.getElementById('monitor-estoque').innerHTML = d.insumos.map(i => `
                     <div class="card">
