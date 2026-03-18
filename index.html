@@ -2,258 +2,284 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGV Lanchonete Vovó</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SGV VOVÓ - App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0f172a; --card: rgba(30, 41, 59, 0.7);
-            --red: #ef4444; --gold: #fbbf24; --green: #10b981; --text: #f8fafc;
+            --bg: #0b0f1a;
+            --card-bg: #161d2f;
+            --primary: #ef4444;
+            --accent: #fbbf24;
+            --success: #10b981;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --nav-bg: #020617;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; flex-direction: row; }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text-main); line-height: 1.5; padding-bottom: 80px; }
+
+        /* HEADER FIXO */
+        header { 
+            background: var(--nav-bg); 
+            padding: 15px; 
+            text-align: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        header h1 { font-size: 18px; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; }
+        header span { color: #fff; }
+
+        /* CONTEÚDO */
+        main { padding: 20px; max-width: 600px; margin: 0 auto; }
+        .page-title { font-size: 22px; margin-bottom: 5px; font-weight: 700; }
+        .status-text { font-size: 12px; color: var(--text-dim); margin-bottom: 20px; }
+
+        /* BOTÃO ATUALIZAR ESTILO APP */
+        .btn-refresh { 
+            width: 100%; 
+            background: var(--accent); 
+            color: #000; 
+            border: none; 
+            padding: 14px; 
+            border-radius: 12px; 
+            font-weight: 700; 
+            font-size: 14px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.2);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+
+        /* CARDS DOS PRODUTOS */
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 18px; 
+            padding: 20px; 
+            margin-bottom: 15px; 
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .card-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 15px; 
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+        .card-header h3 { font-size: 16px; font-weight: 600; }
         
-        /* Menu Lateral Desktop */
-        aside { width: 260px; background: #020617; padding: 30px; position: fixed; height: 100vh; border-right: 1px solid #1e293b; z-index: 100; }
-        .nav-links { list-style: none; margin-top: 40px; }
-        .nav-links a { padding: 12px; display: block; color: #94a3b8; text-decoration: none; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.3s; font-size: 14px; }
-        .nav-links a.active { background: var(--red); color: white; }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+        .info-label { color: var(--text-dim); }
+        .info-value { font-weight: 600; }
+        .margin-badge { background: rgba(16, 185, 129, 0.15); color: var(--success); padding: 4px 10px; border-radius: 8px; font-weight: 700; }
 
-        /* Área Principal */
-        main { margin-left: 260px; padding: 40px; width: calc(100% - 260px); }
-        .page { animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* NAVEGAÇÃO INFERIOR (ESTILO APP) */
+        nav { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            background: var(--nav-bg); 
+            display: flex; 
+            justify-content: space-around; 
+            padding: 10px 5px; 
+            border-top: 1px solid #1e293b;
+            z-index: 1000;
+        }
+        .nav-item { 
+            text-decoration: none; 
+            color: var(--text-dim); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            font-size: 10px; 
+            gap: 4px;
+            transition: 0.2s;
+            width: 20%;
+        }
+        .nav-item.active { color: var(--primary); }
+        .nav-icon { font-size: 20px; }
 
-        .box { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid #1e293b; margin-bottom: 25px; }
-        .stat-highlight { font-size: 32px; font-weight: 700; color: var(--gold); margin-bottom: 15px; border-left: 4px solid var(--red); padding-left: 15px; }
+        /* ESTOQUE E BARRAS */
+        .stock-item { margin-bottom: 15px; }
+        .progress-container { background: #1e293b; height: 10px; border-radius: 10px; margin-top: 6px; overflow: hidden; }
+        .progress-bar { height: 100%; border-radius: 10px; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { text-align: left; font-size: 12px; color: #94a3b8; padding: 12px; border-bottom: 1px solid #1e293b; }
-        td { padding: 15px 12px; border-bottom: 1px solid #0f172a; font-size: 14px; }
-        
-        .progress-bar { background: #1e293b; height: 8px; border-radius: 10px; margin-top: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; transition: 1s; }
+        /* GRID DE FORMS */
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .form-btn { 
+            padding: 25px; border-radius: 20px; color: white; text-decoration: none; 
+            text-align: center; font-weight: 700; font-size: 16px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
 
         .hidden { display: none; }
-        .btn-refresh { background: var(--gold); border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: 700; float: right; transition: 0.2s; }
-
-        /* --- SUPER RESPONSIVIDADE CELULAR --- */
-        @media (max-width: 850px) {
-            body { flex-direction: column; }
-            aside { 
-                width: 100%; height: auto; position: relative; padding: 15px; 
-                border-right: none; border-bottom: 1px solid #1e293b;
-            }
-            main { margin-left: 0; width: 100%; padding: 15px; }
-            
-            /* Menu em Grade para não sumir nada */
-            .nav-links { 
-                display: grid; 
-                grid-template-columns: 1fr 1fr; 
-                gap: 8px; 
-                margin-top: 15px; 
-            }
-            .nav-links a { margin-bottom: 0; text-align: center; padding: 10px; font-size: 12px; }
-
-            /* Fazendo a tabela virar cartões (empilhar) */
-            thead { display: none; } /* Esconde o cabeçalho no celular */
-            tr { 
-                display: block; 
-                background: rgba(15, 23, 42, 0.5); 
-                margin-bottom: 15px; 
-                padding: 10px; 
-                border-radius: 12px;
-                border: 1px solid #1e293b;
-            }
-            td { 
-                display: flex; 
-                justify-content: space-between; 
-                padding: 8px 5px; 
-                border-bottom: 1px dashed #1e293b; 
-                text-align: right;
-            }
-            td:last-child { border-bottom: none; }
-            td::before { 
-                content: attr(data-label); 
-                font-weight: bold; 
-                color: #94a3b8; 
-                text-align: left;
-                font-size: 12px;
-            }
-
-            .btn-refresh { float: none; width: 100%; margin-bottom: 15px; }
-            .stat-highlight { font-size: 28px; }
-        }
     </style>
 </head>
 <body onload="atualizarDashboard()">
 
-    <aside>
-        <h2 style="color:var(--gold); text-align: center;">SGV <span style="color:white">VOVÓ</span></h2>
-        <div class="nav-links">
-            <a onclick="showPage('lucro')" id="m-lucro" class="active">💰 Lucro</a>
-            <a onclick="showPage('estoque')" id="m-estoque">📦 Estoque</a>
-            <a onclick="showPage('operacional')" id="m-operacional">🔌 Custos</a>
-            <a onclick="showPage('forms')" id="m-forms">📝 Forms</a>
-            <a onclick="showPage('relatorios')" id="m-relatorios">📊 Histórico</a>
-        </div>
-    </aside>
+    <header>
+        <h1>SGV <span>VOVÓ</span></h1>
+    </header>
 
     <main>
         <div id="lucro" class="page">
-            <button class="btn-refresh" onclick="atualizarDashboard()">🔄 Atualizar Agora</button>
-            <h1 style="font-size: 20px;">Margens de Venda</h1>
-            <p id="status" style="margin-bottom: 20px; color: #94a3b8; font-size: 12px;">Sincronizando...</p>
+            <h2 class="page-title">💰 Dashboard</h2>
+            <p id="status" class="status-text">Buscando dados na nuvem...</p>
+            
+            <button class="btn-refresh" onclick="atualizarDashboard()">
+                <span>🔄</span> ATUALIZAR AGORA
+            </button>
 
-            <div class="box">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Produto</th>
-                            <th>Custo Total</th>
-                            <th>Preço Venda</th>
-                            <th>Margem %</th>
-                        </tr>
-                    </thead>
-                    <tbody id="lista-custos"></tbody>
-                </table>
-            </div>
+            <div id="lista-custos">
+                </div>
 
-            <div class="box" style="border-color: var(--green);">
-                <h3>Total em Insumos</h3>
-                <div class="stat-highlight" id="val-estoque" style="color: var(--green);">R$ 0,00</div>
+            <div class="card" style="border-left: 5px solid var(--success);">
+                <span class="info-label">Capital Total em Insumos</span>
+                <div id="val-estoque" style="font-size: 28px; font-weight: 800; color: var(--success); margin-top: 5px;">R$ 0,00</div>
             </div>
         </div>
 
         <div id="estoque" class="page hidden">
-            <div class="box">
-                <h2>Nível de Insumos</h2>
-                <div id="monitor-estoque" style="margin-top: 20px;"></div>
-            </div>
+            <h2 class="page-title">📦 Estoque</h2>
+            <p class="status-text">Monitoramento de níveis críticos</p>
+            <div class="card" id="monitor-estoque"></div>
         </div>
 
         <div id="operacional" class="page hidden">
-            <div class="box">
-                <h2>Detalhamento de Custos</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Produto</th>
-                            <th>Gás</th>
-                            <th>Energia</th>
-                            <th>Mão de Obra</th>
-                            <th>Ingredientes</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabela-operacional"></tbody>
-                </table>
-            </div>
+            <h2 class="page-title">🔌 Custos Operacionais</h2>
+            <p class="status-text">Energia, Gás e Mão de Obra por item</p>
+            <div id="lista-operacional"></div>
         </div>
 
         <div id="forms" class="page hidden">
-            <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
-                <a href="https://forms.gle/Q4V5K54ibeizg4sZ8" target="_blank" style="background:var(--red); padding: 25px; border-radius: 15px; color: white; text-decoration:none; text-align: center; font-weight: bold;">📥 Entrada de Insumos</a>
-                <a href="https://forms.gle/Xqh23EWRSsfCueLb6" target="_blank" style="background:#475569; padding: 25px; border-radius: 15px; color: white; text-decoration:none; text-align: center; font-weight: bold;">📤 Saída de Produção</a>
-                <a href="https://forms.gle/RP8KK9peYEqHW3P58" target="_blank" style="background:var(--gold); padding: 25px; border-radius: 15px; color: black; text-decoration:none; text-align: center; font-weight: bold;">🏷️ Atualizar Preços</a>
+            <h2 class="page-title">📝 Lançamentos</h2>
+            <div class="form-grid">
+                <a href="https://forms.gle/Q4V5K54ibeizg4sZ8" target="_blank" class="form-btn" style="background: var(--primary);">📥 Entrada de Insumos</a>
+                <a href="https://forms.gle/Xqh23EWRSsfCueLb6" target="_blank" class="form-btn" style="background: #475569;">📤 Saída de Produção</a>
+                <a href="https://forms.gle/RP8KK9peYEqHW3P58" target="_blank" class="form-btn" style="background: var(--accent); color: #000;">🏷️ Atualizar Preços</a>
             </div>
         </div>
 
         <div id="relatorios" class="page hidden">
-            <div class="box">
-                <h2>Relatórios Históricos</h2>
-                <div style="margin: 15px 0; display: flex; flex-direction: column; gap: 10px;">
-                    <input type="date" id="input-data" style="padding: 12px; border-radius: 8px; border: 1px solid #1e293b; background: #020617; color: white;">
-                    <button class="btn-refresh" style="float:none" onclick="buscarRelatorio()">🔍 Buscar Data</button>
-                    <button class="btn-refresh" style="background: var(--green); float:none" onclick="salvarEstadoAtual()">💾 Salvar Foto de Hoje</button>
-                </div>
-                <table>
-                    <thead>
-                        <tr><th>Produto</th><th>Custo Época</th><th>Venda</th><th>Margem</th></tr>
-                    </thead>
-                    <tbody id="lista-relatorio"></tbody>
-                </table>
+            <h2 class="page-title">📊 Histórico</h2>
+            <div class="card">
+                <input type="date" id="input-data" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #334155; background: #0b0f1a; color: #fff; margin-bottom: 10px;">
+                <button class="btn-refresh" style="margin-bottom: 10px;" onclick="buscarRelatorio()">🔍 BUSCAR DATA</button>
+                <button class="btn-refresh" style="background: var(--success); color: #fff;" onclick="salvarEstadoAtual()">💾 SALVAR FOTO DE HOJE</button>
             </div>
+            <div id="lista-relatorio"></div>
         </div>
     </main>
+
+    <nav>
+        <a href="javascript:void(0)" onclick="showPage('lucro')" id="n-lucro" class="nav-item active">
+            <span class="nav-icon">💰</span><span>Lucro</span>
+        </a>
+        <a href="javascript:void(0)" onclick="showPage('estoque')" id="n-estoque" class="nav-item">
+            <span class="nav-icon">📦</span><span>Estoque</span>
+        </a>
+        <a href="javascript:void(0)" onclick="showPage('operacional')" id="n-operacional" class="nav-item">
+            <span class="nav-icon">🔌</span><span>Custos</span>
+        </a>
+        <a href="javascript:void(0)" onclick="showPage('forms')" id="n-forms" class="nav-item">
+            <span class="nav-icon">📝</span><span>Forms</span>
+        </a>
+        <a href="javascript:void(0)" onclick="showPage('relatorios')" id="n-relatorios" class="nav-item">
+            <span class="nav-icon">📊</span><span>Histórico</span>
+        </a>
+    </nav>
 
     <script>
         const API = "https://script.google.com/macros/s/AKfycbzvSA8jup_IALcD55TXBaEB9vZYV9Qce1UsmsoUd0ZYB3TWH1mO7eTMpTD7rAQ38ot9/exec";
 
         async function atualizarDashboard() {
             const statusEl = document.getElementById('status');
-            statusEl.innerText = "Buscando dados...";
+            statusEl.innerText = "Sincronizando...";
             try {
                 const res = await fetch(API, { redirect: 'follow' });
                 const d = await res.json();
                 
-                // Tabela Principal
+                // Dashboard Lucro (Cards)
                 document.getElementById('lista-custos').innerHTML = d.producao.map(p => `
-                    <tr>
-                        <td data-label="Produto"><strong>${p.nome}</strong></td>
-                        <td data-label="Custo">R$ ${p.custoTotal.toFixed(2)}</td>
-                        <td data-label="Venda">${p.venda}</td>
-                        <td data-label="Margem" style="color:var(--green); font-weight:bold;">${p.margem}</td>
-                    </tr>
-                `).join('');
-
-                // Tabela Operacional
-                document.getElementById('tabela-operacional').innerHTML = d.producao.map(p => `
-                    <tr>
-                        <td data-label="Produto"><strong>${p.nome}</strong></td>
-                        <td data-label="Gás">R$ ${(p.detalhes.gas || 0).toFixed(2)}</td>
-                        <td data-label="Energia">R$ ${(p.detalhes.energia || 0).toFixed(2)}</td>
-                        <td data-label="Mão de Obra">R$ ${(p.detalhes.maoDeObra || 0).toFixed(2)}</td>
-                        <td data-label="Ingredientes">R$ ${(p.detalhes.totalIngredientes || 0).toFixed(2)}</td>
-                    </tr>
-                `).join('');
-
-                document.getElementById('val-estoque').innerText = d.valorEstoque;
-
-                document.getElementById('monitor-estoque').innerHTML = d.insumos.map(i => `
-                    <div style="margin-bottom: 20px;">
-                        <div style="display:flex; justify-content:space-between; font-size:12px;">
-                            <span>${i.nome}</span><span>${i.qtd}</span>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>${p.nome}</h3>
+                            <span class="margin-badge">${p.margem}</span>
                         </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${i.percent}%; background: ${i.percent < 30 ? 'var(--red)' : 'var(--green)'}"></div>
+                        <div class="info-row">
+                            <span class="info-label">Custo Produção</span>
+                            <span class="info-value">R$ ${p.custoTotal.toFixed(2)}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Preço de Venda</span>
+                            <span class="info-value">${p.venda}</span>
                         </div>
                     </div>
                 `).join('');
 
-                statusEl.innerText = "Última atualização: " + new Date().toLocaleTimeString();
+                // Custos Operacionais
+                document.getElementById('lista-operacional').innerHTML = d.producao.map(p => `
+                    <div class="card">
+                        <div class="card-header"><h3>${p.nome}</h3></div>
+                        <div class="info-row"><span>Gás</span><span style="color:var(--accent)">R$ ${(p.detalhes.gas || 0).toFixed(2)}</span></div>
+                        <div class="info-row"><span>Energia</span><span style="color:#60a5fa">R$ ${(p.detalhes.energia || 0).toFixed(2)}</span></div>
+                        <div class="info-row"><span>Mão de Obra</span><span style="color:#a855f7">R$ ${(p.detalhes.maoDeObra || 0).toFixed(2)}</span></div>
+                    </div>
+                `).join('');
+
+                document.getElementById('val-estoque').innerText = d.valorEstoque;
+
+                // Estoque
+                document.getElementById('monitor-estoque').innerHTML = d.insumos.map(i => `
+                    <div class="stock-item">
+                        <div class="info-row">
+                            <span style="font-weight:600">${i.nome}</span>
+                            <span class="info-label">${i.qtd}</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width: ${i.percent}%; background: ${i.percent < 30 ? 'var(--primary)' : 'var(--success)'}"></div>
+                        </div>
+                    </div>
+                `).join('');
+
+                statusEl.innerText = "Atualizado às " + new Date().toLocaleTimeString();
             } catch (e) {
-                statusEl.innerText = "Erro de conexão.";
+                statusEl.innerText = "Erro ao conectar.";
             }
         }
 
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.remove('hidden');
-            document.getElementById('m-' + id).classList.add('active');
+            document.getElementById('n-' + id).classList.add('active');
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
-        async function salvarEstadoAtual() {
-            if(!confirm("Salvar histórico de hoje?")) return;
+        // Funções de Histórico (idênticas às anteriores)
+        async function salvarEstadoAtual() { 
+            if(!confirm("Salvar histórico?")) return; 
             const res = await fetch(API, { redirect: 'follow' });
             const dados = await res.json();
             await fetch(API, { method: 'POST', mode: 'no-cors', body: JSON.stringify(dados) });
-            alert("Sucesso!");
+            alert("Salvo!");
         }
 
         async function buscarRelatorio() {
             const data = document.getElementById('input-data').value;
             const res = await fetch(`${API}?dataRelatorio=${data}`, { redirect: 'follow' });
             const d = await res.json();
-            const tbody = document.getElementById('lista-relatorio');
-            tbody.innerHTML = d.relatorio.map(r => `
-                <tr>
-                    <td data-label="Produto">${r[1]}</td>
-                    <td data-label="Custo">R$ ${parseFloat(r[2]).toFixed(2)}</td>
-                    <td data-label="Venda">${r[3]}</td>
-                    <td data-label="Margem">${r[4]}</td>
-                </tr>
+            document.getElementById('lista-relatorio').innerHTML = d.relatorio.map(r => `
+                <div class="card">
+                    <div class="card-header"><h3>${r[1]}</h3><span class="margin-badge">${r[4]}</span></div>
+                    <div class="info-row"><span>Custo Época</span><span>R$ ${parseFloat(r[2]).toFixed(2)}</span></div>
+                    <div class="info-row"><span>Venda</span><span>${r[3]}</span></div>
+                </div>
             `).join('');
         }
     </script>
