@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SGV VOVÓ - App</title>
+    <title>SGV VOVÓ - Sistema de Gestão</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --bg: #0b0f1a;
@@ -14,15 +18,15 @@
             --success: #10b981;
             --text-main: #f8fafc;
             --text-dim: #94a3b8;
-            --nav-bg: #020617;
+            --nav-bg: #1e293b; /* COR NOVA DA BARRA DE NAVEGAÇÃO */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text-main); line-height: 1.5; padding-bottom: 80px; }
+        body { background: var(--bg); color: var(--text-main); line-height: 1.5; padding-bottom: 100px; }
 
-        /* HEADER FIXO */
+        /* HEADER */
         header { 
-            background: var(--nav-bg); 
+            background: #020617; 
             padding: 15px; 
             text-align: center; 
             position: sticky; 
@@ -33,13 +37,13 @@
         header h1 { font-size: 18px; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; }
         header span { color: #fff; }
 
-        /* CONTEÚDO */
+        /* CONTEÚDO PRINCIPAL */
         main { padding: 20px; max-width: 600px; margin: 0 auto; }
         .page-title { font-size: 22px; margin-bottom: 5px; font-weight: 700; }
         .status-text { font-size: 12px; color: var(--text-dim); margin-bottom: 20px; }
 
-        /* BOTÃO ATUALIZAR ESTILO APP */
-        .btn-refresh { 
+        /* BOTÕES ESTILO APP */
+        .btn-main { 
             width: 100%; 
             background: var(--accent); 
             color: #000; 
@@ -48,12 +52,13 @@
             border-radius: 12px; 
             font-weight: 700; 
             font-size: 14px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.2);
+            margin-bottom: 20px;
+            cursor: pointer;
             display: flex; align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.1);
         }
 
-        /* CARDS DOS PRODUTOS */
+        /* CARDS */
         .card { 
             background: var(--card-bg); 
             border-radius: 18px; 
@@ -70,14 +75,14 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
             padding-bottom: 10px;
         }
-        .card-header h3 { font-size: 16px; font-weight: 600; }
+        .card-header h3 { font-size: 16px; }
         
         .info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
         .info-label { color: var(--text-dim); }
         .info-value { font-weight: 600; }
         .margin-badge { background: rgba(16, 185, 129, 0.15); color: var(--success); padding: 4px 10px; border-radius: 8px; font-weight: 700; }
 
-        /* NAVEGAÇÃO INFERIOR (ESTILO APP) */
+        /* BARRA DE NAVEGAÇÃO INFERIOR ATUALIZADA */
         nav { 
             position: fixed; 
             bottom: 0; 
@@ -86,9 +91,10 @@
             background: var(--nav-bg); 
             display: flex; 
             justify-content: space-around; 
-            padding: 10px 5px; 
-            border-top: 1px solid #1e293b;
+            padding: 15px 5px; 
+            border-top: 1px solid rgba(255,255,255,0.1);
             z-index: 1000;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
         }
         .nav-item { 
             text-decoration: none; 
@@ -96,25 +102,24 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            font-size: 10px; 
-            gap: 4px;
-            transition: 0.2s;
+            font-size: 11px; 
+            gap: 6px;
             width: 20%;
+            font-weight: 600;
         }
         .nav-item.active { color: var(--primary); }
-        .nav-icon { font-size: 20px; }
+        
+        /* ÍCONES MAIORES */
+        .nav-icon { font-size: 26px; line-height: 1; }
 
-        /* ESTOQUE E BARRAS */
-        .stock-item { margin-bottom: 15px; }
+        /* BARRAS DE ESTOQUE */
         .progress-container { background: #1e293b; height: 10px; border-radius: 10px; margin-top: 6px; overflow: hidden; }
-        .progress-bar { height: 100%; border-radius: 10px; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .progress-bar { height: 100%; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        /* GRID DE FORMS */
-        .form-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        /* GRID LANÇAMENTOS */
         .form-btn { 
-            padding: 25px; border-radius: 20px; color: white; text-decoration: none; 
-            text-align: center; font-weight: 700; font-size: 16px;
-            display: flex; flex-direction: column; gap: 10px;
+            padding: 20px; border-radius: 15px; color: white; text-decoration: none; 
+            text-align: center; font-weight: 700; margin-bottom: 15px; display: block;
         }
 
         .hidden { display: none; }
@@ -129,67 +134,64 @@
     <main>
         <div id="lucro" class="page">
             <h2 class="page-title">💰 Dashboard</h2>
-            <p id="status" class="status-text">Buscando dados na nuvem...</p>
+            <p id="status" class="status-text">Carregando dados...</p>
             
-            <button class="btn-refresh" onclick="atualizarDashboard()">
-                <span>🔄</span> ATUALIZAR AGORA
-            </button>
+            <button class="btn-main" onclick="atualizarDashboard()">🔄 ATUALIZAR AGORA</button>
 
-            <div id="lista-custos">
-                </div>
+            <div id="lista-custos"></div>
 
             <div class="card" style="border-left: 5px solid var(--success);">
-                <span class="info-label">Capital Total em Insumos</span>
-                <div id="val-estoque" style="font-size: 28px; font-weight: 800; color: var(--success); margin-top: 5px;">R$ 0,00</div>
+                <span class="info-label">Valor Total em Insumos</span>
+                <div id="val-estoque" style="font-size: 26px; font-weight: 800; color: var(--success); margin-top: 5px;">R$ 0,00</div>
             </div>
         </div>
 
         <div id="estoque" class="page hidden">
             <h2 class="page-title">📦 Estoque</h2>
-            <p class="status-text">Monitoramento de níveis críticos</p>
+            <p class="status-text">Níveis de insumos em tempo real</p>
             <div class="card" id="monitor-estoque"></div>
         </div>
 
         <div id="operacional" class="page hidden">
             <h2 class="page-title">🔌 Custos Operacionais</h2>
-            <p class="status-text">Energia, Gás e Mão de Obra por item</p>
+            <p class="status-text">Detalhamento por item produzido</p>
             <div id="lista-operacional"></div>
         </div>
 
         <div id="forms" class="page hidden">
             <h2 class="page-title">📝 Lançamentos</h2>
-            <div class="form-grid">
-                <a href="https://forms.gle/Q4V5K54ibeizg4sZ8" target="_blank" class="form-btn" style="background: var(--primary);">📥 Entrada de Insumos</a>
-                <a href="https://forms.gle/Xqh23EWRSsfCueLb6" target="_blank" class="form-btn" style="background: #475569;">📤 Saída de Produção</a>
-                <a href="https://forms.gle/RP8KK9peYEqHW3P58" target="_blank" class="form-btn" style="background: var(--accent); color: #000;">🏷️ Atualizar Preços</a>
-            </div>
+            <p class="status-text">Selecione o formulário desejado</p>
+            <a href="https://forms.gle/Q4V5K54ibeizg4sZ8" target="_blank" class="form-btn" style="background: var(--primary);">📥 Entrada de Insumos</a>
+            <a href="https://forms.gle/Xqh23EWRSsfCueLb6" target="_blank" class="form-btn" style="background: #475569;">📤 Saída de Produção</a>
+            <a href="https://forms.gle/RP8KK9peYEqHW3P58" target="_blank" class="form-btn" style="background: var(--accent); color: #000;">🏷️ Atualizar Preços</a>
         </div>
 
         <div id="relatorios" class="page hidden">
             <h2 class="page-title">📊 Histórico</h2>
             <div class="card">
-                <input type="date" id="input-data" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #334155; background: #0b0f1a; color: #fff; margin-bottom: 10px;">
-                <button class="btn-refresh" style="margin-bottom: 10px;" onclick="buscarRelatorio()">🔍 BUSCAR DATA</button>
-                <button class="btn-refresh" style="background: var(--success); color: #fff;" onclick="salvarEstadoAtual()">💾 SALVAR FOTO DE HOJE</button>
+                <input type="date" id="input-data" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #334155; background: #0b0f1a; color: #fff; margin-bottom: 15px;">
+                <button class="btn-main" onclick="buscarRelatorio()">🔍 BUSCAR RELATÓRIO</button>
+                <button id="btn-pdf" class="btn-main" style="background: #334155; color: white; display: none;" onclick="gerarPDF()">📄 BAIXAR PDF</button>
+                <button class="btn-main" style="background: var(--success); color: #fff;" onclick="salvarEstadoAtual()">💾 SALVAR ESTADO DE HOJE</button>
             </div>
             <div id="lista-relatorio"></div>
         </div>
     </main>
 
     <nav>
-        <a href="javascript:void(0)" onclick="showPage('lucro')" id="n-lucro" class="nav-item active">
+        <a onclick="showPage('lucro')" id="n-lucro" class="nav-item active">
             <span class="nav-icon">💰</span><span>Lucro</span>
         </a>
-        <a href="javascript:void(0)" onclick="showPage('estoque')" id="n-estoque" class="nav-item">
+        <a onclick="showPage('estoque')" id="n-estoque" class="nav-item">
             <span class="nav-icon">📦</span><span>Estoque</span>
         </a>
-        <a href="javascript:void(0)" onclick="showPage('operacional')" id="n-operacional" class="nav-item">
+        <a onclick="showPage('operacional')" id="n-operacional" class="nav-item">
             <span class="nav-icon">🔌</span><span>Custos</span>
         </a>
-        <a href="javascript:void(0)" onclick="showPage('forms')" id="n-forms" class="nav-item">
+        <a onclick="showPage('forms')" id="n-forms" class="nav-item">
             <span class="nav-icon">📝</span><span>Forms</span>
         </a>
-        <a href="javascript:void(0)" onclick="showPage('relatorios')" id="n-relatorios" class="nav-item">
+        <a onclick="showPage('relatorios')" id="n-relatorios" class="nav-item">
             <span class="nav-icon">📊</span><span>Histórico</span>
         </a>
     </nav>
@@ -204,25 +206,14 @@
                 const res = await fetch(API, { redirect: 'follow' });
                 const d = await res.json();
                 
-                // Dashboard Lucro (Cards)
                 document.getElementById('lista-custos').innerHTML = d.producao.map(p => `
                     <div class="card">
-                        <div class="card-header">
-                            <h3>${p.nome}</h3>
-                            <span class="margin-badge">${p.margem}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Custo Produção</span>
-                            <span class="info-value">R$ ${p.custoTotal.toFixed(2)}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Preço de Venda</span>
-                            <span class="info-value">${p.venda}</span>
-                        </div>
+                        <div class="card-header"><h3>${p.nome}</h3><span class="margin-badge">${p.margem}</span></div>
+                        <div class="info-row"><span class="info-label">Custo Unitário</span><span class="info-value">R$ ${p.custoTotal.toFixed(2)}</span></div>
+                        <div class="info-row"><span class="info-label">Preço Venda</span><span class="info-value">${p.venda}</span></div>
                     </div>
                 `).join('');
 
-                // Custos Operacionais
                 document.getElementById('lista-operacional').innerHTML = d.producao.map(p => `
                     <div class="card">
                         <div class="card-header"><h3>${p.nome}</h3></div>
@@ -234,22 +225,18 @@
 
                 document.getElementById('val-estoque').innerText = d.valorEstoque;
 
-                // Estoque
                 document.getElementById('monitor-estoque').innerHTML = d.insumos.map(i => `
-                    <div class="stock-item">
-                        <div class="info-row">
-                            <span style="font-weight:600">${i.nome}</span>
-                            <span class="info-label">${i.qtd}</span>
-                        </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="info-row"><span style="font-weight:600">${i.nome}</span><span>${i.qtd}</span></div>
                         <div class="progress-container">
                             <div class="progress-bar" style="width: ${i.percent}%; background: ${i.percent < 30 ? 'var(--primary)' : 'var(--success)'}"></div>
                         </div>
                     </div>
                 `).join('');
 
-                statusEl.innerText = "Atualizado às " + new Date().toLocaleTimeString();
+                statusEl.innerText = "Atualizado: " + new Date().toLocaleTimeString();
             } catch (e) {
-                statusEl.innerText = "Erro ao conectar.";
+                statusEl.innerText = "Erro ao carregar dados.";
             }
         }
 
@@ -261,26 +248,59 @@
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
-        // Funções de Histórico (idênticas às anteriores)
-        async function salvarEstadoAtual() { 
-            if(!confirm("Salvar histórico?")) return; 
-            const res = await fetch(API, { redirect: 'follow' });
-            const dados = await res.json();
-            await fetch(API, { method: 'POST', mode: 'no-cors', body: JSON.stringify(dados) });
-            alert("Salvo!");
-        }
-
         async function buscarRelatorio() {
             const data = document.getElementById('input-data').value;
+            if(!data) return alert("Selecione uma data");
+            
             const res = await fetch(`${API}?dataRelatorio=${data}`, { redirect: 'follow' });
             const d = await res.json();
+            
             document.getElementById('lista-relatorio').innerHTML = d.relatorio.map(r => `
                 <div class="card">
                     <div class="card-header"><h3>${r[1]}</h3><span class="margin-badge">${r[4]}</span></div>
-                    <div class="info-row"><span>Custo Época</span><span>R$ ${parseFloat(r[2]).toFixed(2)}</span></div>
+                    <div class="info-row"><span>Custo na Época</span><span>R$ ${parseFloat(r[2]).toFixed(2)}</span></div>
                     <div class="info-row"><span>Venda</span><span>${r[3]}</span></div>
                 </div>
             `).join('');
+            
+            document.getElementById('btn-pdf').style.display = 'flex'; 
+        }
+
+        function gerarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const dataBusca = document.getElementById('input-data').value.split('-').reverse().join('/');
+
+            doc.setFontSize(18);
+            doc.text("Relatório de Produção - SGV VOVÓ", 14, 20);
+            doc.setFontSize(12);
+            doc.text(`Data de Referência: ${dataBusca}`, 14, 30);
+
+            const itens = [];
+            document.querySelectorAll('#lista-relatorio .card').forEach(card => {
+                const nome = card.querySelector('h3').innerText;
+                const margem = card.querySelector('.margin-badge').innerText;
+                const custo = card.querySelectorAll('.info-row span')[1].innerText;
+                const venda = card.querySelectorAll('.info-row span')[3].innerText;
+                itens.push([nome, custo, venda, margem]);
+            });
+
+            doc.autoTable({
+                startY: 40,
+                head: [['Produto', 'Custo', 'Venda', 'Margem']],
+                body: itens,
+                headStyles: { fillColor: [239, 68, 68] }
+            });
+
+            doc.save(`Relatorio_SGV_${dataBusca.replace(/\//g, '-')}.pdf`);
+        }
+
+        async function salvarEstadoAtual() {
+            if(!confirm("Deseja salvar a foto dos custos de hoje no histórico?")) return;
+            const res = await fetch(API, { redirect: 'follow' });
+            const dados = await res.json();
+            await fetch(API, { method: 'POST', mode: 'no-cors', body: JSON.stringify(dados) });
+            alert("Estado salvo com sucesso!");
         }
     </script>
 </body>
