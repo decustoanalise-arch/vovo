@@ -134,7 +134,7 @@
 
     <main>
         <div id="lucro" class="page">
-            <h2 class="section-title">💰 Custo dos Produtos</h2>
+            <h2 class="section-title">💰 Lucro dos Produtos</h2>
             <p id="status" class="status-text">Sincronizando dados...</p>
             
             <div id="lista-custos" class="grid-container"></div>
@@ -215,19 +215,44 @@
 document.getElementById('lista-operacional').innerHTML = d.producao.map(p => `
     <div class="card">
         <div class="card-header"><h3>${p.nome}</h3></div>
-        <div class="info-row"><span>Ingredientes (Ficha)</span><span style="color:var(--success)">R$ ${(p.custoTotal - (p.detalhes.gas || 0) - (p.detalhes.energia || 0) - (p.detalhes.maoDeObra || 0)).toFixed(2)}</span></div>
+        
+        <div class="info-row">
+            <span>Ingredientes (Ficha)</span>
+            <span style="color:var(--success)">R$ ${(
+                p.custoTotal - 
+                (p.detalhes.gas || 0) - 
+                (p.detalhes.energia || 0) - 
+                (p.detalhes.maoDeObra || 0) -
+                (p.detalhes.taxaCartao || 0) -
+                (p.detalhes.embalagem || 0) -
+                (p.detalhes.impostos || 0) - 
+                (p.detalhes.equipamentos || 0) -
+                (p.detalhes.higiene || 0) -
+                (p.detalhes.logistica || 0) -
+                (p.detalhes.opcionais || 0) -
+                (p.detalhes.desperdicio || 0)
+            ).toFixed(2)}</span>
+        </div>
         
         <div class="info-row"><span>Gás</span><span style="color:var(--accent)">R$ ${(p.detalhes.gas || 0).toFixed(2)}</span></div>
         <div class="info-row"><span>Energia</span><span style="color:#60a5fa">R$ ${(p.detalhes.energia || 0).toFixed(2)}</span></div>
         <div class="info-row"><span>Mão de Obra</span><span style="color:#a855f7">R$ ${(p.detalhes.maoDeObra || 0).toFixed(2)}</span></div>
+        <div class="info-row"><span>Taxa Cartão</span><span style="color:#f87171">R$ ${(p.detalhes.taxaCartao || 0).toFixed(2)}</span></div>
+        <div class="info-row"><span>Embalagem</span><span style="color:#fb923c">R$ ${(p.detalhes.embalagem || 0).toFixed(2)}</span></div>
+        <div class="info-row"><span>Impostos</span><span style="color:#94a3b8">R$ ${(p.detalhes.impostos || 0).toFixed(2)}</span></div>
+        <div class="info-row"><span>Equipamentos</span><span style="color:#2dd4bf">R$ ${(p.detalhes.equipamentos || 0).toFixed(2)}</span></div>
         
+        <div class="info-row"><span>Higiene/Consumo</span><span style="color:#e9d5ff">R$ ${(p.detalhes.higiene || 0).toFixed(2)}</span></div>
+        <div class="info-row"><span>Logística</span><span style="color:#fed7aa">R$ ${(p.detalhes.logistica || 0).toFixed(2)}</span></div>
+        <div class="info-row"><span>Opcionais</span><span style="color:#ddd6fe">R$ ${(p.detalhes.opcionais || 0).toFixed(2)}</span></div>
+        <div class="info-row"><span>Desperdício</span><span style="color:#fca5a5">R$ ${(p.detalhes.desperdicio || 0).toFixed(2)}</span></div>
+
         <div class="info-row" style="margin-top:10px; border-top:1px dashed #334155; padding-top:10px;">
             <span style="font-weight:bold">Custo Total Unitário</span>
             <span style="font-weight:bold; color:#fff">R$ ${p.custoTotal.toFixed(2)}</span>
         </div>
     </div>
 `).join('');
-
                 document.getElementById('monitor-estoque').innerHTML = d.insumos.map(i => `
                     <div class="card">
                         <div class="info-row"><span style="font-weight:700">${i.nome}</span><span>${i.qtd}</span></div>
